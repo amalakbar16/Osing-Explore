@@ -1,0 +1,80 @@
+[
+  {
+    "id": "lod-1",
+    "name": "Ijen Resort & Villas",
+    "corridorIds": ["jalur-ijen-utara"],
+    "rating": 4.6,
+    "priceRange": "mahal",
+    "distanceFromRouteKm": 1.5,
+    "images": ["/images/penginapan/lod-1.jpg"],
+    "roomType": "Resort",
+    "amenities": ["Kolam Renang", "Spa", "Restoran", "WiFi", "Pemandangan Gunung"],
+    "checkIn": "14:00",
+    "pricePerNight": 1200000
+  },
+  {
+    "id": "lod-2",
+    "name": "Aston Banyuwangi Hotel",
+    "corridorIds": ["jalur-pusat"],
+    "rating": 4.7,
+    "priceRange": "sedang",
+    "distanceFromRouteKm": 0.5,
+    "images": ["/images/penginapan/lod-2.jpeg"],
+    "roomType": "Hotel",
+    "amenities": ["Kolam Renang", "Pusat Kebugaran", "Bar", "Meeting Room"],
+    "checkIn": "14:00",
+    "pricePerNight": 650000
+  },
+  {
+    "id": "lod-3",
+    "name": "Margo Utomo Eco Resort",
+    "corridorIds": ["jalur-selatan"],
+    "rating": 4.5,
+    "priceRange": "sedang",
+    "distanceFromRouteKm": 5.0,
+    "images": ["/images/penginapan/lod-3.jpeg"],
+    "roomType": "Resort",
+    "amenities": ["Perkebunan", "Pemerahan Susu Sapi", "Restoran Organik"],
+    "checkIn": "14:00",
+    "pricePerNight": 450000
+  },
+  {
+    "id": "lod-4",
+    "name": "Banyuwangi Backpacker",
+    "corridorIds": ["jalur-pusat"],
+    "rating": 4.4,
+    "priceRange": "murah",
+    "distanceFromRouteKm": 0.2,
+    "images": ["/images/penginapan/lod-4.jpg"],
+    "roomType": "Homestay",
+    "amenities": ["Dapur Bersama", "WiFi", "Penyewaan Motor"],
+    "checkIn": "13:00",
+    "pricePerNight": 100000
+  },
+  {
+    "id": "lod-5",
+    "name": "Homestay Adat Kemiren",
+    "corridorIds": ["jalur-ijen-utara"],
+    "rating": 4.8,
+    "priceRange": "murah",
+    "distanceFromRouteKm": 4.0,
+    "images": ["/images/penginapan/lod-5.jpg"],
+    "roomType": "Homestay",
+    "amenities": ["Suasana Pedesaan", "Sarapan Khas", "Pertunjukan Budaya"],
+    "checkIn": "14:00",
+    "pricePerNight": 200000
+  },
+  {
+    "id": "lod-6",
+    "name": "Ijen Glamping",
+    "corridorIds": ["jalur-ijen-utara"],
+    "rating": 4.7,
+    "priceRange": "sedang",
+    "distanceFromRouteKm": 2.0,
+    "images": ["/images/penginapan/lod-6.jpeg"],
+    "roomType": "Glamping",
+    "amenities": ["Api Unggun", "BBQ", "Kamar Mandi Dalam", "Pemandangan Hutan"],
+    "checkIn": "15:00",
+    "pricePerNight": 500000
+  }
+]

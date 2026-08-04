@@ -1,0 +1,93 @@
+[
+  {
+    "id": "cul-1",
+    "name": "Sego Tempong Mbok Wah",
+    "corridorIds": ["jalur-ijen-utara", "jalur-pusat"],
+    "rating": 4.8,
+    "priceRange": "murah",
+    "distanceFromRouteKm": 2.1,
+    "images": ["/images/kuliner/cul-1.jpeg"],
+    "cuisineType": "Lokal Pedas",
+    "address": "Jl. Gembrung No. 220, Bakungan",
+    "openingHours": "08:00 - 22:00",
+    "specialty": "Nasi Tempong Ekstra Pedas"
+  },
+  {
+    "id": "cul-2",
+    "name": "Rujak Soto Mbok Mbret",
+    "corridorIds": ["jalur-pusat", "jalur-selatan"],
+    "rating": 4.7,
+    "priceRange": "murah",
+    "distanceFromRouteKm": 1.5,
+    "images": ["/images/kuliner/cul-2.jpg"],
+    "cuisineType": "Khas Daerah",
+    "address": "Benculuk, Cluring",
+    "openingHours": "09:00 - 17:00",
+    "specialty": "Rujak Soto Cingur"
+  },
+  {
+    "id": "cul-3",
+    "name": "Sego Cawuk Mak Mantih",
+    "corridorIds": ["jalur-pusat"],
+    "rating": 4.6,
+    "priceRange": "murah",
+    "distanceFromRouteKm": 0.5,
+    "images": ["/images/kuliner/cul-3.jpeg"],
+    "cuisineType": "Sarapan Lokal",
+    "address": "Jl. Wahid Hasyim, Banyuwangi",
+    "openingHours": "06:00 - 11:00",
+    "specialty": "Sego Cawuk Kuah Pindang"
+  },
+  {
+    "id": "cul-4",
+    "name": "Ikan Bakar Pesona Boom",
+    "corridorIds": ["jalur-pusat"],
+    "rating": 4.5,
+    "priceRange": "sedang",
+    "distanceFromRouteKm": 0.2,
+    "images": ["/images/kuliner/cul-4.jpeg"],
+    "cuisineType": "Seafood",
+    "address": "Kawasan Pantai Boom Marina",
+    "openingHours": "16:00 - 23:00",
+    "specialty": "Ikan Bakar Bumbu Rujak"
+  },
+  {
+    "id": "cul-5",
+    "name": "Sanggar Genjah Arum (Kopi Osing)",
+    "corridorIds": ["jalur-ijen-utara"],
+    "rating": 4.9,
+    "priceRange": "sedang",
+    "distanceFromRouteKm": 3.0,
+    "images": ["/images/kuliner/cul-5.jpeg"],
+    "cuisineType": "Cafe",
+    "address": "Desa Wisata Kemiren",
+    "openingHours": "15:00 - 21:00",
+    "specialty": "Kopi Kopok & Pertunjukan Budaya"
+  },
+  {
+    "id": "cul-6",
+    "name": "Blambangan Seafood",
+    "corridorIds": ["jalur-selatan"],
+    "rating": 4.4,
+    "priceRange": "sedang",
+    "distanceFromRouteKm": 5.0,
+    "images": ["/images/kuliner/cul-6.jpeg"],
+    "cuisineType": "Seafood",
+    "address": "Muncar",
+    "openingHours": "10:00 - 21:00",
+    "specialty": "Kepiting Asam Manis"
+  },
+  {
+    "id": "cul-7",
+    "name": "Warung Botok Tawon",
+    "corridorIds": ["jalur-pusat"],
+    "rating": 4.5,
+    "priceRange": "murah",
+    "distanceFromRouteKm": 1.0,
+    "images": ["/images/kuliner/cul-7.jpeg"],
+    "cuisineType": "Khas Daerah",
+    "address": "Rogojampi",
+    "openingHours": "08:00 - 15:00",
+    "specialty": "Botok Sarang Lebah"
+  }
+]

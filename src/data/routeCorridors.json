@@ -1,0 +1,20 @@
+[
+  {
+    "id": "jalur-ijen-utara",
+    "label": "Menuju Kawah Ijen (Utara)",
+    "mainDestinationId": "dest-ijen",
+    "totalDistanceKm": 35.2,
+    "estimatedDurationMin": 90,
+    "radiusKm": 15,
+    "trailPoints": [{"lat": -8.2117, "lng": 114.3676}, {"lat": -8.0583, "lng": 114.2418}]
+  },
+  {
+    "id": "jalur-selatan",
+    "label": "Jalur Selatan",
+    "mainDestinationId": "dest-p-merah",
+    "totalDistanceKm": 60.5,
+    "estimatedDurationMin": 120,
+    "radiusKm": 15,
+    "trailPoints": [{"lat": -8.2117, "lng": 114.3676}, {"lat": -8.5992, "lng": 114.0308}]
+  }
+]

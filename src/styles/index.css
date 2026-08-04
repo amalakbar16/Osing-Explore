@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-base: #F7F3EE;
+    --color-surface: #FFFFFF;
+    --color-surface-alt: #F0EBE3;
+    --color-accent-primary: #0D8A82;
+    --color-accent-gold: #B8860B;
+    --color-accent-rose: #C0392B;
+    --color-ink: #1C1917;
+    --color-ink-muted: #6B7280;
+  }
+
+  body {
+    @apply bg-base text-ink font-body antialiased;
+  }
+}
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 20px);
+  }
+  .pt-safe {
+    padding-top: max(env(safe-area-inset-top), 48px);
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Animation Bypassing Tailwind Cache */
+@keyframes custom-dash-flow {
+  from { stroke-dashoffset: 10; }
+  to { stroke-dashoffset: 0; }
+}
+
+.animate-dash-flow-slow {
+  animation: custom-dash-flow 15s linear infinite;
+}
