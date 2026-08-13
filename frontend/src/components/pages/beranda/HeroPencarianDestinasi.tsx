@@ -40,18 +40,13 @@ export default function HeroPencarianDestinasi({ onSearch }: HeroPencarianDestin
       <div className="absolute top-20 left-0 w-40 h-40 bg-accent-primary/15 rounded-full blur-3xl animate-blob-float pointer-events-none -z-10 [animation-delay:2s]" />
 
       {/* Brand Logo */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-8">
         <img 
           src="/images/logo_osing_explore.png" 
           alt="Osing Explore Logo" 
-          className="h-16 w-auto object-contain drop-shadow-sm"
+          className="h-28 xs:h-32 sm:h-36 w-auto object-contain drop-shadow-sm"
         />
       </div>
-
-      <h1 className="font-display text-[2.75rem] xs:text-5xl sm:text-6xl text-ink leading-[1.1] mb-5 tracking-tight font-bold drop-shadow-sm">
-        Jelajah <br />
-        <span className="text-accent-primary italic font-serif font-medium">Tanah Blambangan</span>
-      </h1>
       <p className="text-sm sm:text-base text-ink-muted mb-8 max-w-[320px] sm:max-w-md mx-auto leading-relaxed">
         Tentukan destinasi utamamu, kami merangkai perjalanan terbaik ke sana.
       </p>
