@@ -56,6 +56,7 @@ export default function HeroPencarianDestinasi({ onSearch }: HeroPencarianDestin
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-white border border-surface-alt rounded-l-xl py-3 pl-10 pr-4 text-sm text-ink focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary transition-all"
+            suppressHydrationWarning
           />
         </div>
         <Button type="submit" variant="primary" className="py-3 px-5 rounded-l-none rounded-r-xl shadow-none">

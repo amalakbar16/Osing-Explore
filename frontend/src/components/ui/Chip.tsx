@@ -18,6 +18,7 @@ export default function Chip({
   return (
     <button
       onClick={onClick}
+      suppressHydrationWarning
       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm border transition-all ${
         active
           ? 'bg-accent-primary border-accent-primary text-white shadow-colored-teal font-medium'
