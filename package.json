@@ -1,0 +1,13 @@
+{
+  "name": "osing-explore-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "backend/venv/Scripts/uvicorn app.main:app --reload --port 8000 --app-dir backend",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
