@@ -39,6 +39,15 @@ export default function HeroPencarianDestinasi({ onSearch }: HeroPencarianDestin
       <div className="absolute top-0 right-0 w-56 h-56 bg-accent-gold/15 rounded-full blur-3xl animate-blob-float pointer-events-none -z-10" />
       <div className="absolute top-20 left-0 w-40 h-40 bg-accent-primary/15 rounded-full blur-3xl animate-blob-float pointer-events-none -z-10 [animation-delay:2s]" />
 
+      {/* Brand Logo */}
+      <div className="flex justify-center mb-6">
+        <img 
+          src="/images/logo_osing_explore.png" 
+          alt="Osing Explore Logo" 
+          className="h-16 w-auto object-contain drop-shadow-sm"
+        />
+      </div>
+
       <h1 className="font-display text-[2.75rem] xs:text-5xl sm:text-6xl text-ink leading-[1.1] mb-5 tracking-tight font-bold drop-shadow-sm">
         Jelajah <br />
         <span className="text-accent-primary italic font-serif font-medium">Tanah Blambangan</span>
