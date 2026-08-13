@@ -30,3 +30,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Project custom ignores
+temp_old/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.venv/
+backend/venv/
+backend/__pycache__/
+

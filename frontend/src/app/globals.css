@@ -1,0 +1,106 @@
+@import "../styles/fonts.css";
+@import "tailwindcss";
+
+@theme {
+  --color-base: #F7F3EE;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F0EBE3;
+  --color-accent-primary: #0D8A82;
+  --color-accent-gold: #B8860B;
+  --color-accent-rose: #C0392B;
+  --color-ink: #1C1917;
+  --color-ink-muted: #6B7280;
+
+  --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-colored-teal: 0 10px 25px -5px rgba(13, 138, 130, 0.2);
+  --shadow-colored-gold: 0 10px 25px -5px rgba(184, 134, 11, 0.15);
+  --shadow-colored-blue: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
+
+  --font-display: Fraunces, serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "Space Grotesk", monospace;
+
+  --font-size-display-sm: 1.75rem;
+  --font-size-display-md: 2.25rem;
+  --font-size-display-lg: 3rem;
+
+  --animate-fade-in: fade-in 0.5s ease-out forwards;
+  --animate-slide-up: slide-up 0.7s ease-out forwards;
+  --animate-dash-flow: dash-flow 10s linear infinite;
+  --animate-bobbing: bobbing 4s ease-in-out infinite;
+  --animate-blob-float: blob-float 15s ease-in-out infinite;
+  --animate-marquee-scroll: marquee-scroll 25s linear infinite;
+  --animate-scale-pulse: scale-pulse 2s ease-in-out infinite;
+
+  @keyframes fade-in {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-up {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes dash-flow {
+    0% { stroke-dashoffset: 10; }
+    100% { stroke-dashoffset: 0; }
+  }
+  @keyframes bobbing {
+    0%, 100% { transform: translateY(-5%); }
+    50% { transform: translateY(5%); }
+  }
+  @keyframes blob-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+  }
+  @keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes scale-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 20px);
+}
+@utility pt-safe {
+  padding-top: max(env(safe-area-inset-top), 48px);
+}
+@utility hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+body {
+  background-color: var(--color-base);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Animation Bypassing Tailwind Cache */
+@keyframes custom-dash-flow {
+  from { stroke-dashoffset: 10; }
+  to { stroke-dashoffset: 0; }
+}
+
+.animate-dash-flow-slow {
+  animation: custom-dash-flow 15s linear infinite;
+}
