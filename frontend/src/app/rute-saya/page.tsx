@@ -16,24 +16,37 @@ export default function RuteSayaPage() {
   const handleBukaSemuaDiMaps = () => {
     if (state.savedRoute.length === 0) return;
     
-    const start = state.savedRoute[0];
-    const waypoints = state.savedRoute.slice(1);
+    const getCoords = (dest: any) => {
+      if (dest.coordinates && dest.coordinates.lat !== undefined) {
+        return { lat: dest.coordinates.lat, lng: dest.coordinates.lng };
+      }
+      return { lat: dest.lat, lng: dest.lng };
+    };
+
+    const startCoords = getCoords(state.savedRoute[0]);
+    let url = `https://www.google.com/maps/dir/?api=1&origin=${startCoords.lat},${startCoords.lng}`;
     
-    let url = `https://www.google.com/maps/dir/?api=1&origin=${start.coordinates.lat},${start.coordinates.lng}`;
-    
-    if (waypoints.length > 0) {
-      const wpParams = waypoints.map(w => `${w.coordinates.lat},${w.coordinates.lng}`).join('|');
-      url += `&waypoints=${wpParams}`;
+    if (state.savedRoute.length > 1) {
+      const intermediateWaypoints = state.savedRoute.slice(1, state.savedRoute.length - 1);
+      if (intermediateWaypoints.length > 0) {
+        const wpParams = intermediateWaypoints.map(w => {
+          const c = getCoords(w);
+          return `${c.lat},${c.lng}`;
+        }).join('|');
+        url += `&waypoints=${encodeURIComponent(wpParams)}`;
+      }
+      
+      const endCoords = getCoords(state.savedRoute[state.savedRoute.length - 1]);
+      url += `&destination=${endCoords.lat},${endCoords.lng}`;
+    } else {
+      url += `&destination=${startCoords.lat},${startCoords.lng}`;
     }
-    
-    const end = state.savedRoute[state.savedRoute.length - 1];
-    url += `&destination=${end.coordinates.lat},${end.coordinates.lng}`;
 
     window.open(url, '_blank');
   };
 
   return (
-    <PageTransition className="p-6 pt-12 pb-24 min-h-screen">
+    <PageTransition className="p-6 pt-safe pb-24 min-h-screen">
       <h1 className="font-display text-2xl text-ink mb-2">Rute Perjalanan Saya</h1>
       <p className="text-sm text-ink-muted mb-8">
         {state.savedRoute.length} destinasi dipilih untuk perjalanan Anda.

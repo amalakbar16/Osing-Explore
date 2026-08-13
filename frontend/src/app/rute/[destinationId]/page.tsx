@@ -74,7 +74,7 @@ export default function PetaRutePage() {
 
   return (
     <PageTransition>
-      <div className="bg-surface border-b border-surface-alt pb-4 pt-6">
+      <div className="bg-surface border-b border-surface-alt pb-4 pt-safe">
         <div className="px-6 mb-2">
           <h1 className="font-display text-2xl text-ink">Perjalanan ke {mainDest.name}</h1>
           <p className="text-sm text-ink-muted">Estimasi: 90 menit • Via {mainDest.corridorIds[0]}</p>

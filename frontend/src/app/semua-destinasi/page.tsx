@@ -24,7 +24,7 @@ export default function SemuaDestinasiPage() {
   return (
     <PageTransition>
       <div className="bg-surface min-h-screen">
-        <div className="sticky top-0 z-30 bg-surface/80 backdrop-blur-lg border-b border-surface-alt px-4 py-4 flex items-center gap-3">
+        <div className="sticky top-0 z-30 bg-surface/90 backdrop-blur-lg border-b border-surface-alt px-4 pt-safe pb-4 flex items-center gap-3">
           <button 
             onClick={() => router.back()} 
             className="p-2 rounded-full hover:bg-surface-alt text-ink transition-colors"

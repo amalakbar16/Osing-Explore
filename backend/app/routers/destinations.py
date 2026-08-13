@@ -8,6 +8,9 @@ def map_destination(dest: dict) -> dict:
     if not dest:
         return dest
     mapped = dest.copy()
+    # Construct coordinates object for frontend compatibility
+    if "lat" in mapped and "lng" in mapped:
+        mapped["coordinates"] = {"lat": mapped["lat"], "lng": mapped["lng"]}
     # Map snake_case database fields to camelCase frontend fields
     if "kisah_destinasi" in mapped:
         mapped["kisahDestinasi"] = mapped.pop("kisah_destinasi")

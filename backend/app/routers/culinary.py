@@ -8,6 +8,8 @@ def map_culinary(item: dict) -> dict:
     if not item:
         return item
     mapped = item.copy()
+    if "lat" in mapped and "lng" in mapped:
+        mapped["coordinates"] = {"lat": mapped["lat"], "lng": mapped["lng"]}
     if "corridor_ids" in mapped:
         mapped["corridorIds"] = mapped.pop("corridor_ids")
     if "distance_from_route_km" in mapped:

@@ -26,7 +26,7 @@ export default function PenginapanPage() {
 
   return (
     <PageTransition>
-      <div className="pt-6 pb-2 px-6">
+      <div className="pt-safe pb-2 px-6">
         <h1 className="font-display text-2xl text-ink mb-2">Tempat Istirahat</h1>
         <p className="text-sm text-ink-muted mb-4">
           {state.activeCorridorId 

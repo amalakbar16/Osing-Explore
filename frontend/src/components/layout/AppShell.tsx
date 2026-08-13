@@ -43,7 +43,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const isFullBleed = pathname?.startsWith('/destinasi/');
 
   return (
-    <div className={`min-h-screen bg-base text-ink flex flex-col ${isFullBleed ? '' : 'pt-safe'}`}>
+    <div className="min-h-screen bg-base text-ink flex flex-col">
       {!isOnline && (
         <div className="bg-accent-rose text-white text-xs py-1 px-4 text-center flex items-center justify-center gap-2">
           <WifiOff size={14} /> Anda sedang offline. Menggunakan data tersimpan.
