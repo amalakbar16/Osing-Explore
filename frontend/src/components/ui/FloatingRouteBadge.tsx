@@ -22,6 +22,22 @@ export default function FloatingRouteBadge() {
     moved: false
   });
 
+  React.useEffect(() => {
+    const btn = buttonRef.current;
+    if (!btn) return;
+
+    const preventDefaultScroll = (e: TouchEvent) => {
+      if (isDragging && e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
+    btn.addEventListener('touchmove', preventDefaultScroll, { passive: false });
+    return () => {
+      btn.removeEventListener('touchmove', preventDefaultScroll);
+    };
+  }, [isDragging]);
+
   if (count === 0) return null;
 
   const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
