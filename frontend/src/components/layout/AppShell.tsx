@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import BottomNavigation from './BottomNavigation';
-import { useOnlineStatus } from '../../hooks/useOnlineStatus';
+import { usePathname } from 'next/navigation';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { WifiOff, Download } from 'lucide-react';
 import Button from '../ui/Button';
 import FloatingRouteBadge from '../ui/FloatingRouteBadge';
@@ -14,6 +15,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const isOnline = useOnlineStatus();
+  const pathname = usePathname();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
@@ -21,7 +23,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      // Munculkan prompt jika user belum menginstall (misal setelah beberapa detik)
       setTimeout(() => setShowInstallPrompt(true), 10000);
     };
 
@@ -39,8 +40,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const isFullBleed = pathname?.startsWith('/destinasi/');
+
   return (
-    <div className="min-h-screen bg-base text-ink flex flex-col pt-safe">
+    <div className={`min-h-screen bg-base text-ink flex flex-col ${isFullBleed ? '' : 'pt-safe'}`}>
       {!isOnline && (
         <div className="bg-accent-rose text-white text-xs py-1 px-4 text-center flex items-center justify-center gap-2">
           <WifiOff size={14} /> Anda sedang offline. Menggunakan data tersimpan.

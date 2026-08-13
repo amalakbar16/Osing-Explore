@@ -33,9 +33,9 @@ export default function DetailDestinasiPage() {
   }, [id]);
 
   const handleOpenMaps = () => {
-    if (dest?.coordinates) {
-      const { lat, lng } = dest.coordinates;
-      const url = `https://www.google.com/maps/search/wisata/@${lat},${lng},14z`;
+    if (dest) {
+      const query = encodeURIComponent(`${dest.name}, Banyuwangi`);
+      const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
       window.open(url, '_blank');
     }
   };
