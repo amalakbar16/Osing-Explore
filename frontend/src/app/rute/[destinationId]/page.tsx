@@ -11,9 +11,18 @@ import DestinasiSearahCarousel from '@/components/pages/peta-rute/DestinasiSeara
 import RadiusExpandNotice from '@/components/pages/peta-rute/RadiusExpandNotice';
 import Skeleton from '@/components/ui/Skeleton';
 import EmptyState from '@/components/ui/EmptyState';
-import { MapPinOff } from 'lucide-react';
+import LazyImage from '@/components/common/LazyImage';
+import { MapPinOff, ArrowLeft, Compass, Info } from 'lucide-react';
 import { MAP_CONSTANTS } from '@/utils/constants';
 import type { Destination } from '@/types';
+
+function getCorridorTitle(corridorId?: string) {
+  if (!corridorId) return 'Jalur Utama Banyuwangi';
+  if (corridorId.includes('ijen') || corridorId.includes('utara')) return 'Koridor Wisata Ijen & Licin';
+  if (corridorId.includes('selatan') || corridorId.includes('merah')) return 'Koridor Pesisir Selatan & Pulau Merah';
+  if (corridorId.includes('pusat') || corridorId.includes('purwo')) return 'Koridor Budaya Kota & Taman Nasional';
+  return corridorId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
 
 export default function PetaRutePage() {
   const params = useParams();
@@ -45,7 +54,7 @@ export default function PetaRutePage() {
 
   if (loadingDest) {
     return (
-      <div className="p-6">
+      <div className="p-6 pt-safe">
         <Skeleton className="w-full h-32 mb-6" />
         <Skeleton className="w-3/4 h-8 mb-4" />
         <div className="flex gap-4">
@@ -75,13 +84,43 @@ export default function PetaRutePage() {
   const isRadiusExpanded = (routeRecs?.length || 0) < 3;
 
   return (
-    <PageTransition>
-      <div className="bg-surface border-b border-surface-alt pb-4 pt-safe">
-        <div className="px-6 mb-2">
-          <h1 className="font-display text-2xl text-ink">Perjalanan ke {mainDest.name}</h1>
-          <p className="text-sm text-ink-muted">Estimasi: 90 menit • Via {mainDest.corridorIds?.[0] || 'Jalur Utama'}</p>
+    <PageTransition className="pb-24 bg-base min-h-screen">
+      {/* Top Header */}
+      <div className="bg-surface border-b border-surface-alt pt-safe pb-4">
+        <div className="px-5 mb-3 flex items-center gap-3">
+          <button 
+            onClick={() => router.push(`/destinasi/${mainDest.id}`)}
+            className="p-2 rounded-full hover:bg-surface-alt text-ink transition-colors -ml-1"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <div>
+            <h1 className="font-display text-lg font-bold text-ink leading-tight">Koridor Rute Wisata</h1>
+            <p className="text-xs text-accent-primary font-medium">{getCorridorTitle(mainDest.corridorIds?.[0])}</p>
+          </div>
         </div>
         
+        {/* Main Destination Hero Summary in Route */}
+        <div className="px-5 mb-2">
+          <div 
+            onClick={() => router.push(`/destinasi/${mainDest.id}`)}
+            className="bg-accent-primary/8 border border-accent-primary/20 rounded-2xl p-3.5 flex items-center gap-3.5 cursor-pointer hover:border-accent-primary/40 transition-all"
+          >
+            <div className="w-14 h-14 rounded-xl overflow-hidden bg-surface-alt shrink-0 border border-surface-alt">
+              <LazyImage src={mainDest.images[0]} alt={mainDest.name} className="w-full h-full object-cover" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold bg-accent-primary text-white px-2 py-0.5 rounded-full">Destinasi Utama</span>
+                <span className="text-xs text-accent-gold font-bold">★ {mainDest.rating}</span>
+              </div>
+              <h2 className="font-bold text-base text-ink truncate mt-0.5">{mainDest.name}</h2>
+              <p className="text-xs text-ink-muted line-clamp-1">{mainDest.shortDescription}</p>
+            </div>
+            <Info size={16} className="text-accent-primary shrink-0 mr-1" />
+          </div>
+        </div>
+
         <RouteTrailVisual mainDestination={mainDest} />
       </div>
 

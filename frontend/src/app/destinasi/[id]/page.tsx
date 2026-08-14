@@ -9,7 +9,7 @@ import LazyImage from '@/components/common/LazyImage';
 import Skeleton from '@/components/ui/Skeleton';
 import RatingBadge from '@/components/ui/RatingBadge';
 import Button from '@/components/ui/Button';
-import { ArrowLeft, Clock, MapPin, Navigation, BookmarkPlus, CheckCircle2, Ticket, Tent } from 'lucide-react';
+import { ArrowLeft, Clock, MapPin, Navigation, BookmarkPlus, CheckCircle2, Ticket, Tent, ArrowRight } from 'lucide-react';
 import { useRouteContext } from '@/context/RouteContext';
 import { useAuth } from '@/context/AuthContext';
 import AuthPromptModal from '@/components/auth/AuthPromptModal';
@@ -116,18 +116,28 @@ export default function DetailDestinasiPage() {
         </p>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 mb-6">
-          <Button variant="primary" className="flex-1 flex gap-2" onClick={handleOpenMaps}>
-            <Navigation size={18} /> Maps
-          </Button>
-          <Button 
-            variant="secondary" 
-            className={`flex-1 flex gap-2 ${isSaved ? 'text-accent-primary border-accent-primary bg-accent-primary/5' : ''}`}
-            onClick={handleToggleRoute}
+        <div className="flex flex-col gap-2.5 mb-6">
+          <div className="flex gap-2.5">
+            <Button variant="primary" className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-bold shadow-colored-teal text-sm" onClick={handleOpenMaps}>
+              <Navigation size={16} /> Buka Maps
+            </Button>
+            <Button 
+              variant="secondary" 
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm transition-all ${isSaved ? 'text-accent-primary border-accent-primary bg-accent-primary/10' : ''}`}
+              onClick={handleToggleRoute}
+            >
+              {isSaved ? <CheckCircle2 size={16} /> : <BookmarkPlus size={16} />}
+              {isSaved ? "Di Rute Saya" : "+ Tambah ke Rute"}
+            </Button>
+          </div>
+          
+          <button
+            onClick={() => router.push(`/rute/${dest.id}`)}
+            className="w-full py-2.5 px-4 rounded-2xl bg-accent-primary/10 hover:bg-accent-primary/15 border border-accent-primary/20 text-accent-primary font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
           >
-            {isSaved ? <CheckCircle2 size={18} /> : <BookmarkPlus size={18} />}
-            {isSaved ? "Di Rute" : "Tambah"}
-          </Button>
+            <span>🗺️ Lihat Koridor Rute & Wisata Searah</span>
+            <ArrowRight size={14} />
+          </button>
         </div>
 
         {/* Tags */}

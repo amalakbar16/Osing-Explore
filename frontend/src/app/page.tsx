@@ -23,18 +23,17 @@ export default function BerandaPage() {
     try {
       const results = await searchDestinations(q);
       if (results.length > 0) {
-        router.push(`/rute/${results[0].id}`);
+        router.push(`/destinasi/${results[0].id}`);
       } else {
         const lower = q.toLowerCase();
-        if (lower.includes('ijen')) router.push('/rute/dest-ijen');
-        else if (lower.includes('merah') || lower.includes('pulau')) router.push('/rute/dest-p-merah');
-        else if (lower.includes('plengkung') || lower.includes('g-land')) router.push('/rute/dest-plengkung');
-        else if (lower.includes('boom')) router.push('/rute/dest-boom');
-        else router.push('/rute/dest-ijen');
+        if (lower.includes('ijen')) router.push('/destinasi/dest-ijen');
+        else if (lower.includes('merah') || lower.includes('pulau')) router.push('/destinasi/dest-p-merah');
+        else if (lower.includes('plengkung') || lower.includes('g-land')) router.push('/destinasi/dest-plengkung');
+        else if (lower.includes('boom')) router.push('/destinasi/dest-boom');
+        else router.push(`/semua-destinasi?search=${encodeURIComponent(q)}`);
       }
-    } catch (e) {
-      console.error(e);
-      router.push('/rute/dest-ijen');
+    } catch {
+      router.push('/destinasi/dest-ijen');
     }
   };
 

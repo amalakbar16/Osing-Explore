@@ -1,33 +1,85 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { Search, MapPin, Star, ArrowRight, Loader2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { searchDestinations } from '@/services/destinationService';
+import type { Destination } from '@/types';
+import LazyImage from '@/components/common/LazyImage';
 
 interface HeroPencarianDestinasiProps {
-  onSearch: (query: string) => void;
+  onSearch?: (query: string) => void;
 }
 
 export default function HeroPencarianDestinasi({ onSearch }: HeroPencarianDestinasiProps) {
+  const router = useRouter();
   const [query, setQuery] = useState('');
+  const [suggestions, setSuggestions] = useState<Destination[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Debounced search
+  // Live search as user types without interrupting or auto-navigating
   useEffect(() => {
-    const handler = setTimeout(() => {
-      if (query.trim()) {
-        onSearch(query);
+    if (!query.trim()) {
+      setSuggestions([]);
+      setShowDropdown(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const results = await searchDestinations(query.trim());
+        setSuggestions(results.slice(0, 5));
+        setShowDropdown(true);
+      } catch {
+        setSuggestions([]);
+      } finally {
+        setIsSearching(false);
       }
-    }, 500);
-    return () => clearTimeout(handler);
-  }, [query, onSearch]);
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  // Click outside listener
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) onSearch(query);
+    const q = query.trim();
+    if (!q) return;
+    setShowDropdown(false);
+
+    if (onSearch) {
+      onSearch(q);
+      return;
+    }
+
+    if (suggestions.length > 0) {
+      router.push(`/destinasi/${suggestions[0].id}`);
+    } else {
+      router.push(`/semua-destinasi?search=${encodeURIComponent(q)}`);
+    }
+  };
+
+  const handleSelectDestination = (destId: string) => {
+    setShowDropdown(false);
+    router.push(`/destinasi/${destId}`);
   };
 
   return (
-    <div className="relative pt-12 pb-10 px-6 text-center overflow-hidden">
+    <div className="relative pt-12 pb-10 px-6 text-center overflow-visible">
       {/* Decorative Jejak Rute SVG in background */}
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none -z-10 flex items-center justify-center">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" preserveAspectRatio="none" className="w-[150%] h-40 -rotate-6">
@@ -51,29 +103,99 @@ export default function HeroPencarianDestinasi({ onSearch }: HeroPencarianDestin
         Tentukan destinasi utamamu, kami merangkai perjalanan terbaik ke sana.
       </p>
 
-      <form 
-        onSubmit={handleSubmit} 
-        className="relative max-w-sm sm:max-w-md mx-auto flex items-center bg-white border border-surface-alt/80 rounded-2xl p-1.5 z-10 shadow-lg shadow-ink/5 focus-within:border-accent-primary/50 focus-within:ring-2 focus-within:ring-accent-primary/10 transition-all duration-300"
-      >
-        <div className="relative flex-1 flex items-center">
-          <Search className="absolute left-3.5 text-ink-muted/70" size={18} />
-          <input 
-            type="text" 
-            placeholder="Cari Kawah Ijen, Pulau Merah..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-transparent py-2.5 pl-11 pr-3 text-sm text-ink placeholder:text-ink-muted/40 focus:outline-none"
-            suppressHydrationWarning
-          />
-        </div>
-        <Button 
-          type="submit" 
-          variant="primary" 
-          className="py-2.5 px-6 rounded-xl shadow-none font-semibold text-sm active:scale-95 transition-all duration-200"
+      {/* Search Bar with live dropdown container */}
+      <div ref={searchContainerRef} className="relative max-w-sm sm:max-w-md mx-auto z-30">
+        <form 
+          onSubmit={handleSubmit} 
+          className="relative flex items-center bg-white border border-surface-alt/80 rounded-2xl p-1.5 shadow-lg shadow-ink/5 focus-within:border-accent-primary/50 focus-within:ring-2 focus-within:ring-accent-primary/10 transition-all duration-300"
         >
-          Cari
-        </Button>
-      </form>
+          <div className="relative flex-1 flex items-center">
+            {isSearching ? (
+              <Loader2 className="absolute left-3.5 text-accent-primary animate-spin" size={18} />
+            ) : (
+              <Search className="absolute left-3.5 text-ink-muted/70" size={18} />
+            )}
+            <input 
+              type="text" 
+              placeholder="Cari Kawah Ijen, Pulau Merah..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => {
+                if (suggestions.length > 0) setShowDropdown(true);
+              }}
+              className="w-full bg-transparent py-2.5 pl-11 pr-3 text-sm text-ink placeholder:text-ink-muted/40 focus:outline-none"
+              suppressHydrationWarning
+            />
+          </div>
+          <Button 
+            type="submit" 
+            variant="primary" 
+            className="py-2.5 px-6 rounded-xl shadow-none font-semibold text-sm active:scale-95 transition-all duration-200"
+          >
+            Cari
+          </Button>
+        </form>
+
+        {/* Live Search Suggestions Dropdown */}
+        {showDropdown && suggestions.length > 0 && (
+          <div className="absolute left-0 right-0 top-full mt-2 bg-surface rounded-2xl border border-surface-alt shadow-2xl overflow-hidden z-40 animate-fade-in text-left">
+            <div className="p-2 border-b border-surface-alt bg-surface-alt/30 text-[11px] font-bold text-ink-muted uppercase tracking-wider flex items-center justify-between">
+              <span>Destinasi Ditemukan</span>
+              <span>{suggestions.length} hasil</span>
+            </div>
+
+            <div className="divide-y divide-surface-alt">
+              {suggestions.map((dest) => (
+                <button
+                  key={dest.id}
+                  type="button"
+                  onClick={() => handleSelectDestination(dest.id)}
+                  className="w-full p-3 flex items-center gap-3 hover:bg-accent-primary/5 active:bg-accent-primary/10 transition-colors group cursor-pointer text-left"
+                >
+                  <div className="w-12 h-12 rounded-xl overflow-hidden bg-surface-alt shrink-0 border border-surface-alt">
+                    <LazyImage src={dest.images[0]} alt={dest.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-sm text-ink group-hover:text-accent-primary transition-colors truncate">
+                      {dest.name}
+                    </div>
+                    <div className="flex items-center gap-2 mt-0.5 text-xs text-ink-muted">
+                      <span className="capitalize">{dest.category}</span>
+                      <span>•</span>
+                      <span className="flex items-center gap-0.5 text-accent-gold font-semibold">
+                        <Star size={12} fill="currentColor" /> {dest.rating}
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowRight size={16} className="text-ink-muted group-hover:text-accent-primary group-hover:translate-x-0.5 transition-all shrink-0" />
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="w-full p-2.5 text-center text-xs font-semibold text-accent-primary hover:bg-accent-primary/5 transition-colors border-t border-surface-alt block"
+            >
+              Lihat semua hasil untuk &quot;{query}&quot; →
+            </button>
+          </div>
+        )}
+
+        {showDropdown && query.trim() && !isSearching && suggestions.length === 0 && (
+          <div className="absolute left-0 right-0 top-full mt-2 bg-surface rounded-2xl border border-surface-alt shadow-2xl p-4 z-40 animate-fade-in text-center">
+            <p className="text-xs text-ink-muted">
+              Tidak ada destinasi yang cocok dengan &quot;{query}&quot;
+            </p>
+            <button
+              onClick={() => router.push(`/semua-destinasi`)}
+              className="mt-2 text-xs font-semibold text-accent-primary hover:underline block mx-auto"
+            >
+              Jelajahi Semua Destinasi
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
