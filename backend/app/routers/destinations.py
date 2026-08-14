@@ -26,6 +26,18 @@ def map_destination(dest: dict) -> dict:
         mapped["priceRange"] = mapped.pop("price_range")
     if "ticket_price" in mapped:
         mapped["ticketPrice"] = mapped.pop("ticket_price")
+    
+    # Guarantee corridorIds is always a valid non-empty list
+    if "corridorIds" not in mapped or not mapped["corridorIds"]:
+        dest_id = str(mapped.get("id", "")).lower()
+        cat = str(mapped.get("category", "")).lower()
+        if any(k in dest_id for k in ["merah", "teluk", "bedul", "sukamade", "mustika", "wedhi"]) or "pantai" in cat:
+            mapped["corridorIds"] = ["jalur-selatan"]
+        elif any(k in dest_id for k in ["alas", "plengkung", "g-land", "sadengan", "trianggulasi", "boom", "desa-adat", "kemiren", "blambangan"]):
+            mapped["corridorIds"] = ["jalur-pusat"]
+        else:
+            mapped["corridorIds"] = ["jalur-ijen-utara"]
+            
     return mapped
 
 @router.get("/")

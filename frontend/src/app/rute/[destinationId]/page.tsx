@@ -30,16 +30,18 @@ export default function PetaRutePage() {
     getDestinationById(targetId).then(dest => {
       setMainDest(dest || null);
       if (dest) {
+        const corridorId = dest.corridorIds?.[0] || 'jalur-ijen-utara';
         dispatch({ 
           type: 'SET_ACTIVE_ROUTE', 
-          payload: { corridorId: dest.corridorIds[0], destination: dest } 
+          payload: { corridorId, destination: dest } 
         });
       }
       setLoadingDest(false);
     });
   }, [targetId, dispatch]);
 
-  const { data: routeRecs, loading: loadingRecs } = useRouteRecommendation(mainDest?.corridorIds[0]);
+  const activeCorridorId = mainDest?.corridorIds?.[0] || 'jalur-ijen-utara';
+  const { data: routeRecs, loading: loadingRecs } = useRouteRecommendation(activeCorridorId);
 
   if (loadingDest) {
     return (
@@ -70,14 +72,14 @@ export default function PetaRutePage() {
     );
   }
 
-  const isRadiusExpanded = routeRecs.length < 3;
+  const isRadiusExpanded = (routeRecs?.length || 0) < 3;
 
   return (
     <PageTransition>
       <div className="bg-surface border-b border-surface-alt pb-4 pt-safe">
         <div className="px-6 mb-2">
           <h1 className="font-display text-2xl text-ink">Perjalanan ke {mainDest.name}</h1>
-          <p className="text-sm text-ink-muted">Estimasi: 90 menit • Via {mainDest.corridorIds[0]}</p>
+          <p className="text-sm text-ink-muted">Estimasi: 90 menit • Via {mainDest.corridorIds?.[0] || 'Jalur Utama'}</p>
         </div>
         
         <RouteTrailVisual mainDestination={mainDest} />
