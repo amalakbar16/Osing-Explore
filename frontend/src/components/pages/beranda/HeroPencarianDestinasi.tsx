@@ -27,7 +27,7 @@ export default function HeroPencarianDestinasi({ onSearch }: HeroPencarianDestin
   };
 
   return (
-    <div className="relative pt-24 pb-14 px-6 text-center overflow-hidden">
+    <div className="relative pt-12 pb-10 px-6 text-center overflow-hidden">
       {/* Decorative Jejak Rute SVG in background */}
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none -z-10 flex items-center justify-center">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" preserveAspectRatio="none" className="w-[150%] h-40 -rotate-6">
@@ -40,14 +40,14 @@ export default function HeroPencarianDestinasi({ onSearch }: HeroPencarianDestin
       <div className="absolute top-20 left-0 w-40 h-40 bg-accent-primary/15 rounded-full blur-3xl animate-blob-float pointer-events-none -z-10 [animation-delay:2s]" />
 
       {/* Brand Logo */}
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-5">
         <img 
           src="/images/logo_osing_explore.png" 
           alt="Osing Explore Logo" 
-          className="h-28 xs:h-32 sm:h-36 w-auto object-contain drop-shadow-sm"
+          className="h-52 xs:h-56 sm:h-64 w-auto object-contain drop-shadow-md"
         />
       </div>
-      <p className="text-sm sm:text-base text-ink-muted mb-8 max-w-[320px] sm:max-w-md mx-auto leading-relaxed">
+      <p className="text-sm sm:text-base text-ink-muted mb-6 max-w-[320px] sm:max-w-md mx-auto leading-relaxed">
         Tentukan destinasi utamamu, kami merangkai perjalanan terbaik ke sana.
       </p>
 

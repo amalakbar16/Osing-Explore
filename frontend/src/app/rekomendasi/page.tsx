@@ -66,26 +66,22 @@ export default function RekomendasiPage() {
   return (
     <PageTransition className="min-h-screen bg-base pb-28">
       {/* Top Header */}
-      <div className="sticky top-0 z-30 bg-surface/90 backdrop-blur-md border-b border-surface-alt px-4 pt-safe pb-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="sticky top-0 z-30 bg-surface/90 backdrop-blur-md border-b border-surface-alt px-4 pt-safe pb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
           <button 
             onClick={() => {
               if (step === 'result' || step === 1) router.push('/');
               else if (typeof step === 'number') setStep((step - 1) as 1 | 2);
             }} 
-            className="p-2 rounded-full hover:bg-surface-alt text-ink transition-colors"
+            className="p-1.5 rounded-full hover:bg-surface-alt text-ink transition-colors -ml-1"
           >
             <ArrowLeft size={20} />
           </button>
-          <div>
-            <h1 className="font-display text-lg font-bold text-ink">Asisten Rute Pintar</h1>
-            <p className="text-[11px] text-ink-muted">Sistem Rekomendasi Wisata Banyuwangi</p>
-          </div>
+          <h1 className="font-display text-base font-bold text-ink">Asisten Rute Pintar</h1>
         </div>
 
         {typeof step === 'number' && (
-          <div className="flex items-center gap-1.5 bg-accent-primary/10 text-accent-primary px-3 py-1 rounded-full text-xs font-bold font-mono">
-            <span>Langkah</span>
+          <div className="flex items-center gap-1 bg-accent-primary/10 text-accent-primary px-2.5 py-0.5 rounded-full text-xs font-bold font-mono">
             <span>{step}/3</span>
           </div>
         )}

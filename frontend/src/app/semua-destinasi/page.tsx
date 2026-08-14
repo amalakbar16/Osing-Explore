@@ -24,14 +24,14 @@ export default function SemuaDestinasiPage() {
   return (
     <PageTransition>
       <div className="bg-surface min-h-screen">
-        <div className="sticky top-0 z-30 bg-surface/90 backdrop-blur-lg border-b border-surface-alt px-4 pt-safe pb-4 flex items-center gap-3">
+        <div className="sticky top-0 z-30 bg-surface/90 backdrop-blur-md border-b border-surface-alt px-4 pt-safe pb-3 flex items-center gap-2.5">
           <button 
             onClick={() => router.back()} 
-            className="p-2 rounded-full hover:bg-surface-alt text-ink transition-colors"
+            className="p-1.5 rounded-full hover:bg-surface-alt text-ink transition-colors -ml-1"
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="font-display text-xl text-ink">Semua Destinasi</h1>
+          <h1 className="font-display text-base font-bold text-ink">Semua Destinasi</h1>
         </div>
 
         <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

@@ -67,7 +67,7 @@
   padding-bottom: max(env(safe-area-inset-bottom), 20px);
 }
 @utility pt-safe {
-  padding-top: max(env(safe-area-inset-top), 48px);
+  padding-top: max(env(safe-area-inset-top), 24px);
 }
 @utility hide-scrollbar {
   -ms-overflow-style: none;
