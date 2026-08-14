@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import PageTransition from '@/components/layout/PageTransition';
 import HeroPencarianDestinasi from '@/components/pages/beranda/HeroPencarianDestinasi';
+import SmartRecommendationBanner from '@/components/pages/beranda/SmartRecommendationBanner';
 import KategoriFilter from '@/components/pages/beranda/KategoriFilter';
 import DestinasiPopulerMarquee from '@/components/pages/beranda/DestinasiPopulerMarquee';
 import KisahBlambangan from '@/components/pages/beranda/KisahBlambangan';
@@ -41,6 +42,10 @@ export default function BerandaPage() {
     <PageTransition className="pb-12 bg-base">
       <HeroPencarianDestinasi onSearch={handleSearch} />
       
+      <ScrollReveal delay={50}>
+        <SmartRecommendationBanner />
+      </ScrollReveal>
+
       <ScrollReveal delay={100}>
         <KategoriFilter activeKategori={activeKategori} onSelect={setActiveKategori} />
       </ScrollReveal>

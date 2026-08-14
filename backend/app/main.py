@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import destinations, culinary, lodging, corridors
+from app.routers import destinations, culinary, lodging, corridors, recommendations
 
 app = FastAPI(
     title="Osing Explore API",
@@ -20,6 +20,7 @@ app.include_router(destinations.router, prefix="/api/destinations", tags=["Desti
 app.include_router(culinary.router, prefix="/api/culinary", tags=["Culinary"])
 app.include_router(lodging.router, prefix="/api/lodging", tags=["Lodging"])
 app.include_router(corridors.router, prefix="/api/corridors", tags=["Corridors"])
+app.include_router(recommendations.router, prefix="/api/recommendations", tags=["Recommendations"])
 
 @app.get("/")
 async def root():

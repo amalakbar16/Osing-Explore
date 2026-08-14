@@ -13,6 +13,7 @@ interface RouteState {
 type RouteAction =
   | { type: 'SET_ACTIVE_ROUTE'; payload: { corridorId: string | null; destination: Destination | null } }
   | { type: 'ADD_TO_ROUTE'; payload: Destination }
+  | { type: 'SET_SAVED_ROUTE'; payload: Destination[] }
   | { type: 'REMOVE_FROM_ROUTE'; payload: string }
   | { type: 'CLEAR_SAVED_ROUTE' }
   | { type: 'CLEAR_ROUTE' }
@@ -38,6 +39,15 @@ function routeReducer(state: RouteState, action: RouteAction): RouteState {
         ...state,
         savedRoute: action.payload,
       };
+    case 'SET_SAVED_ROUTE':
+      newState = {
+        ...state,
+        savedRoute: action.payload,
+      };
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('osing_explore_saved_route', JSON.stringify(newState.savedRoute));
+      }
+      return newState;
     case 'SET_ACTIVE_ROUTE':
       return {
         ...state,

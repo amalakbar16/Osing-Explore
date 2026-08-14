@@ -62,3 +62,23 @@ export interface Lodging {
   checkIn: string;
   pricePerNight: number;
 }
+
+export interface WizardRequest {
+  vibe: 'alam' | 'budaya' | 'pantai' | 'santai';
+  budget: 'hemat' | 'sedang' | 'fleksibel';
+  duration: '1_hari' | '2_hari' | '3_hari';
+}
+
+export interface WizardRecommendationResponse {
+  personaTitle: string;
+  personaDesc: string;
+  matchPercentage: number;
+  anchorDestination: Destination;
+  corridorId: string;
+  itinerary: Destination[];
+  recommendedCulinary?: Culinary | null;
+  recommendedLodging?: Lodging | null;
+  totalEstimatedTime: string;
+  travelTip: string;
+}
+

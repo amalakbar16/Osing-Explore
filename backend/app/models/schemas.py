@@ -62,3 +62,21 @@ class Lodging(BaseModel):
     amenities: List[str]
     checkIn: str
     pricePerNight: int
+
+class WizardRequest(BaseModel):
+    vibe: str  # 'alam' | 'budaya' | 'pantai' | 'santai'
+    budget: str  # 'hemat' | 'sedang' | 'fleksibel'
+    duration: str  # '1_hari' | '2_hari' | '3_hari'
+
+class WizardRecommendationResponse(BaseModel):
+    personaTitle: str
+    personaDesc: str
+    matchPercentage: int
+    anchorDestination: Destination
+    corridorId: str
+    itinerary: List[Destination]
+    recommendedCulinary: Optional[Culinary] = None
+    recommendedLodging: Optional[Lodging] = None
+    totalEstimatedTime: str
+    travelTip: str
+
