@@ -29,6 +29,7 @@ interface AuthContextType {
   isDemoUser: boolean;
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signUp: (email: string, password: string, fullName: string, personaTitle?: string) => Promise<{ success: boolean; error?: string }>;
+  signInWithGoogle: () => Promise<{ success: boolean; error?: string }>;
   signInDemo: () => Promise<void>;
   signOut: () => Promise<void>;
   saveRouteToCloud: (title: string, destinations: Destination[], corridorId?: string) => Promise<{ success: boolean; error?: string }>;
@@ -153,6 +154,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: true };
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Gagal mendaftar. Silakan coba lagi.';
+      return { success: false, error: msg };
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/profil` : undefined,
+        },
+      });
+      if (error) return { success: false, error: error.message };
+      return { success: true };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Gagal masuk dengan Google.';
       return { success: false, error: msg };
     }
   };
@@ -323,6 +340,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isDemoUser,
         signIn,
         signUp,
+        signInWithGoogle,
         signInDemo,
         signOut,
         saveRouteToCloud,
