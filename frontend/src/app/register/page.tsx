@@ -253,22 +253,8 @@ function RegisterFormContent() {
           <span>Daftar dengan Google</span>
         </button>
 
-        {/* Demo Fast Access */}
-        <div className="mt-5 pt-4 border-t border-surface-alt text-center">
-          <button
-            type="button"
-            onClick={async () => {
-              await signInDemo();
-              router.push(redirectPath);
-            }}
-            className="inline-flex items-center gap-1.5 text-xs text-accent-gold font-bold hover:underline"
-          >
-            <Sparkles size={13} /> Atau Masuk dengan Akun Demo Wisatawan
-          </button>
-        </div>
-
         {/* Login Footer Link */}
-        <div className="text-center mt-4">
+        <div className="text-center mt-6">
           <p className="text-xs text-ink-muted">
             Sudah memiliki akun?{' '}
             <Link 

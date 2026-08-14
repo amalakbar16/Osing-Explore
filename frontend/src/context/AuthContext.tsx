@@ -129,7 +129,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const cleanEmail = email.trim().includes('@') ? email.trim() : `${email.trim()}@gmail.com`;
+      const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
       if (error) return { success: false, error: error.message };
       return { success: true };
     } catch (err: unknown) {
@@ -140,8 +141,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string, fullName: string, personaTitle?: string) => {
     try {
+      const cleanEmail = email.trim().includes('@') ? email.trim() : `${email.trim()}@gmail.com`;
       const { error } = await supabase.auth.signUp({
-        email,
+        email: cleanEmail,
         password,
         options: {
           data: {

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import PageTransition from '@/components/layout/PageTransition';
 import Button from '@/components/ui/Button';
-import { ArrowLeft, Mail, Lock, Eye, EyeOff, Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
 function LoginFormContent() {
@@ -13,10 +13,10 @@ function LoginFormContent() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/profil';
 
-  const { signIn, signInDemo, signInWithGoogle } = useAuth();
+  const { signIn, signInWithGoogle } = useAuth();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('wahyu123@gmail.com');
+  const [password, setPassword] = useState('123456');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,15 +54,6 @@ function LoginFormContent() {
     }
   };
 
-  const handleDemoLogin = async () => {
-    setLoading(true);
-    await signInDemo();
-    setSuccess(true);
-    setTimeout(() => {
-      router.push(redirectPath);
-    }, 500);
-  };
-
   return (
     <PageTransition className="min-h-screen bg-base pb-24">
       {/* Top Header */}
@@ -80,7 +71,7 @@ function LoginFormContent() {
 
       <div className="px-6 py-6 max-w-md mx-auto">
         {/* Brand Header */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-8">
           <div className="flex justify-center mb-3">
             <img 
               src="/images/logo_osing_explore.png" 
@@ -90,36 +81,8 @@ function LoginFormContent() {
           </div>
           <h2 className="text-xl font-display font-bold text-ink">Selamat Datang Kembali</h2>
           <p className="text-xs text-ink-muted mt-1 max-w-xs mx-auto leading-relaxed">
-            Masuk untuk menyinkronkan rute cloud, bookmark wisata, dan personalisasi profilmu.
+            Masuk untuk menyinkronkan rute cloud, bookmark wisata, dan profil persona wisatamu.
           </p>
-        </div>
-
-        {/* Demo Fast Login Box for Gemastik Pitching */}
-        <div className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-accent-primary/10 via-accent-primary/5 to-accent-gold/10 border border-accent-primary/30 shadow-soft">
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-5 h-5 rounded-full bg-accent-gold/20 text-accent-gold flex items-center justify-center">
-              <Sparkles size={12} className="animate-scale-pulse" />
-            </div>
-            <span className="text-xs font-bold text-accent-primary">Mode Presentasi Demo</span>
-          </div>
-          <p className="text-[11px] text-ink-muted leading-relaxed mb-3">
-            Gunakan akun demo instan tanpa perlu mengetik email & password saat sesi pitching.
-          </p>
-          <Button 
-            variant="secondary" 
-            className="w-full py-2.5 text-xs font-bold text-accent-primary border-accent-primary/40 hover:bg-accent-primary/10 rounded-xl flex items-center justify-center gap-1.5 shadow-sm"
-            onClick={handleDemoLogin}
-            disabled={loading}
-          >
-            <Sparkles size={14} /> ⚡ Masuk Cepat (Akun Demo Wisatawan)
-          </Button>
-        </div>
-
-        {/* Divider */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="flex-1 h-px bg-surface-alt" />
-          <span className="text-[10px] text-ink-muted uppercase tracking-wider font-semibold">Atau Masuk Manual</span>
-          <div className="flex-1 h-px bg-surface-alt" />
         </div>
 
         {/* Error / Success Alert */}
@@ -138,15 +101,13 @@ function LoginFormContent() {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-ink mb-1.5">Alamat Email</label>
+            <label className="block text-xs font-bold text-ink mb-1.5">Alamat Email / Nama Pengguna</label>
             <div className="relative flex items-center">
               <Mail className="absolute left-3.5 text-ink-muted" size={18} />
               <input 
-                type="email" 
-                name="login_user_email_field"
-                autoComplete="off"
+                type="text" 
                 placeholder="nama@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -162,8 +123,6 @@ function LoginFormContent() {
               <Lock className="absolute left-3.5 text-ink-muted" size={18} />
               <input 
                 type={showPassword ? "text" : "password"} 
-                name="login_user_pwd_field"
-                autoComplete="current-password"
                 placeholder="Masukkan kata sandi"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -183,7 +142,7 @@ function LoginFormContent() {
           <Button 
             type="submit" 
             variant="primary" 
-            className="w-full py-3.5 rounded-2xl font-bold text-sm shadow-colored-teal active:scale-[0.98] transition-all mt-2"
+            className="w-full py-3.5 rounded-2xl font-bold text-sm shadow-colored-teal active:scale-[0.98] transition-all mt-3"
             disabled={loading}
           >
             {loading ? 'Memproses...' : 'Masuk ke Akun'}
