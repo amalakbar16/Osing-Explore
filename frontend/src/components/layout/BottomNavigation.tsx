@@ -3,16 +3,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Map as MapIcon, Coffee, Bed } from 'lucide-react';
+import { Home, Map as MapIcon, Coffee, Bed, User } from 'lucide-react';
 
 export default function BottomNavigation() {
   const pathname = usePathname();
 
   const navItems = [
     { path: '/', label: 'Beranda', icon: Home },
-    { path: '/rute-saya', label: 'Rute Saya', icon: MapIcon },
+    { path: '/rute-saya', label: 'Rute', icon: MapIcon },
     { path: '/kuliner', label: 'Kuliner', icon: Coffee },
-    { path: '/penginapan', label: 'Penginapan', icon: Bed },
+    { path: '/penginapan', label: 'Inap', icon: Bed },
+    { path: '/profil', label: 'Profil', icon: User },
   ];
 
   return (

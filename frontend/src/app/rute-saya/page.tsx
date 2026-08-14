@@ -1,17 +1,37 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouteContext } from '@/context/RouteContext';
+import { useAuth } from '@/context/AuthContext';
 import PageTransition from '@/components/layout/PageTransition';
 import EmptyState from '@/components/ui/EmptyState';
-import { MapPin, Map, Trash2, Navigation } from 'lucide-react';
+import { MapPin, Map, Trash2, Navigation, Cloud, CheckCircle2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import LazyImage from '@/components/common/LazyImage';
 import { useRouter } from 'next/navigation';
 
 export default function RuteSayaPage() {
   const { state, dispatch } = useRouteContext();
+  const { user, isDemoUser, saveRouteToCloud } = useAuth();
   const router = useRouter();
+
+  const [savingCloud, setSavingCloud] = useState(false);
+  const [savedCloudSuccess, setSavedCloudSuccess] = useState(false);
+
+  const handleSaveToCloud = async () => {
+    if (!user && !isDemoUser) {
+      router.push('/login?redirect=/rute-saya');
+      return;
+    }
+    setSavingCloud(true);
+    const title = `Rute ${state.savedRoute[0]?.name || 'Wisata'} & Sekitarnya`;
+    const res = await saveRouteToCloud(title, state.savedRoute, state.activeCorridorId || undefined);
+    setSavingCloud(false);
+    if (res.success) {
+      setSavedCloudSuccess(true);
+      setTimeout(() => setSavedCloudSuccess(false), 3000);
+    }
+  };
 
   const handleBukaSemuaDiMaps = () => {
     if (state.savedRoute.length === 0) return;
@@ -86,10 +106,32 @@ export default function RuteSayaPage() {
           ))}
 
           <div className="mt-8 flex flex-col gap-3">
-            <Button variant="primary" className="w-full flex items-center justify-center gap-2 py-3" onClick={handleBukaSemuaDiMaps}>
+            <Button 
+              variant="secondary" 
+              className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl border font-bold text-sm transition-all shadow-soft ${
+                savedCloudSuccess 
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700' 
+                  : 'border-accent-primary/40 text-accent-primary hover:bg-accent-primary/10'
+              }`} 
+              onClick={handleSaveToCloud}
+              disabled={savingCloud}
+            >
+              {savedCloudSuccess ? (
+                <>
+                  <CheckCircle2 size={18} className="text-emerald-600" /> Rute Tersimpan di Cloud!
+                </>
+              ) : (
+                <>
+                  <Cloud size={18} /> {user || isDemoUser ? 'Simpan Rute ke Akun Cloud' : 'Masuk untuk Simpan ke Cloud'}
+                </>
+              )}
+            </Button>
+
+            <Button variant="primary" className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold shadow-colored-teal" onClick={handleBukaSemuaDiMaps}>
               <Navigation size={18} /> Buka Rute di Maps
             </Button>
-            <Button variant="ghost" className="w-full text-accent-rose py-3" onClick={() => dispatch({ type: 'CLEAR_SAVED_ROUTE' })}>
+
+            <Button variant="ghost" className="w-full text-accent-rose py-2.5 text-xs rounded-xl" onClick={() => dispatch({ type: 'CLEAR_SAVED_ROUTE' })}>
               Kosongkan Rute
             </Button>
           </div>
