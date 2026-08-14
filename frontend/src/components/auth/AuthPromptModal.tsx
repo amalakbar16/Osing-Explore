@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
-import { Sparkles, ArrowRight, X, UserPlus, LogIn } from 'lucide-react';
+import { Sparkles, X, UserPlus, LogIn } from 'lucide-react';
 
 interface AuthPromptModalProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ export default function AuthPromptModal({
   isOpen,
   onClose,
   title = "Masuk untuk Melanjutkan",
-  description = "Fitur ini membutuhkan akun wisatawan agar rencana liburan dan preferensi AI tersimpan aman di akunmu.",
+  description = "Fitur ini membutuhkan akun wisatawan agar rencana liburan dan preferensi AI tersimpan rapi di akunmu.",
   redirectPath = "/profil",
 }: AuthPromptModalProps) {
   const router = useRouter();
@@ -39,56 +39,57 @@ export default function AuthPromptModal({
       {/* Backdrop click dismiss */}
       <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Modal Dialog */}
-      <div className="relative w-full max-w-sm bg-surface rounded-3xl p-6 border border-surface-alt shadow-2xl z-10 animate-scale-pulse overflow-hidden">
+      {/* Modal Dialog - Compact & Sleek */}
+      <div className="relative w-full max-w-[310px] xs:max-w-[330px] bg-surface rounded-2xl p-4 sm:p-5 border border-surface-alt shadow-2xl z-10 animate-scale-pulse overflow-hidden">
         {/* Glow Accent Decoration */}
-        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-32 h-32 bg-accent-primary/15 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-32 h-32 bg-accent-gold/15 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-accent-primary/15 rounded-full blur-xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-accent-gold/15 rounded-full blur-xl pointer-events-none" />
 
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-surface-alt hover:bg-surface-alt/80 text-ink-muted hover:text-ink flex items-center justify-center transition-colors"
+          className="absolute top-3 right-3 w-7 h-7 rounded-full bg-surface-alt hover:bg-surface-alt/80 text-ink-muted hover:text-ink flex items-center justify-center transition-colors cursor-pointer"
         >
-          <X size={16} />
+          <X size={14} />
         </button>
 
-        {/* Header Icon */}
-        <div className="text-center pt-2 pb-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-accent-primary to-teal-800 text-white flex items-center justify-center mx-auto mb-4 shadow-colored-teal">
-            <Sparkles size={26} className="animate-pulse" />
+        {/* Header Icon & Text */}
+        <div className="text-center pt-1 pb-3">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-accent-primary to-teal-800 text-white flex items-center justify-center mx-auto mb-3 shadow-colored-teal">
+            <Sparkles size={20} className="animate-pulse" />
           </div>
-          <h3 className="font-display text-xl font-bold text-ink leading-tight">
+          <h3 className="font-display text-base font-bold text-ink leading-tight">
             {title}
           </h3>
-          <p className="text-xs text-ink-muted mt-2 leading-relaxed px-2">
+          <p className="text-xs text-ink-muted mt-1 leading-snug px-1">
             {description}
           </p>
         </div>
 
         {/* Action Buttons */}
-        <div className="space-y-2.5 pt-2">
+        <div className="space-y-2 pt-1">
           <Button
             variant="primary"
-            className="w-full py-3.5 rounded-2xl font-bold text-sm shadow-colored-teal flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded-xl font-bold text-xs shadow-colored-teal flex items-center justify-center gap-2"
             onClick={handleGoToLogin}
           >
-            <LogIn size={16} />
+            <LogIn size={15} />
             <span>Masuk ke Akun</span>
           </Button>
 
           <Button
             variant="secondary"
-            className="w-full py-3 rounded-2xl font-semibold text-xs flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded-xl font-semibold text-xs flex items-center justify-center gap-2"
             onClick={handleGoToRegister}
           >
-            <UserPlus size={16} />
+            <UserPlus size={15} />
             <span>Daftar Akun Baru</span>
           </Button>
 
           <button
+            type="button"
             onClick={onClose}
-            className="w-full py-2 text-xs font-semibold text-ink-muted hover:text-ink transition-colors text-center block pt-1"
+            className="w-full py-1 text-xs font-medium text-ink-muted hover:text-ink transition-colors text-center block cursor-pointer"
           >
             Nanti Saja
           </button>

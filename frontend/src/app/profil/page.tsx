@@ -14,6 +14,7 @@ import {
   FolderHeart, ExternalLink, RefreshCw
 } from 'lucide-react';
 import Link from 'next/link';
+import LogoutConfirmModal from '@/components/auth/LogoutConfirmModal';
 
 export default function ProfilPage() {
   const router = useRouter();
@@ -22,6 +23,8 @@ export default function ProfilPage() {
 
   const [cloudRoutes, setCloudRoutes] = useState<CloudSavedRoute[]>([]);
   const [loadingRoutes, setLoadingRoutes] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const isAuthenticated = !!user;
 
@@ -34,6 +37,13 @@ export default function ProfilPage() {
       });
     }
   }, [isAuthenticated, fetchCloudRoutes]);
+
+  const handleConfirmLogout = async () => {
+    setLoggingOut(true);
+    await signOut();
+    setLoggingOut(false);
+    setIsLogoutModalOpen(false);
+  };
 
   const handleOpenCloudRoute = (route: CloudSavedRoute) => {
     dispatch({ type: 'SET_SAVED_ROUTE', payload: route.destinations });
@@ -61,8 +71,9 @@ export default function ProfilPage() {
         <h1 className="font-display text-base font-bold text-ink">Profil Wisatawan</h1>
         {isAuthenticated && (
           <button 
-            onClick={() => signOut()}
-            className="text-xs text-accent-rose hover:text-rose-700 flex items-center gap-1 font-semibold transition-colors"
+            type="button"
+            onClick={() => setIsLogoutModalOpen(true)}
+            className="text-xs text-accent-rose hover:text-rose-700 flex items-center gap-1 font-semibold transition-colors cursor-pointer py-1 px-2 rounded-lg hover:bg-accent-rose/10"
           >
             <LogOut size={14} /> Keluar
           </button>
@@ -239,8 +250,8 @@ export default function ProfilPage() {
               )}
             </div>
 
-            {/* Quick Links */}
-            <div className="pt-2">
+            {/* Quick Links & Logout */}
+            <div className="pt-2 space-y-2.5">
               <Link 
                 href="/rekomendasi"
                 className="w-full bg-surface rounded-2xl p-3.5 border border-surface-alt flex items-center justify-between text-ink hover:border-accent-primary transition-all shadow-soft group"
@@ -256,12 +267,28 @@ export default function ProfilPage() {
                 </div>
                 <ArrowRight size={16} className="text-ink-muted group-hover:translate-x-1 transition-transform" />
               </Link>
+
+              <button
+                type="button"
+                onClick={() => setIsLogoutModalOpen(true)}
+                className="w-full py-3 rounded-2xl border border-accent-rose/20 bg-accent-rose/5 hover:bg-accent-rose/10 text-accent-rose text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <LogOut size={15} />
+                <span>Keluar dari Akun</span>
+              </button>
             </div>
 
           </div>
         )}
 
       </div>
+
+      <LogoutConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        loading={loggingOut}
+      />
     </PageTransition>
   );
 }
