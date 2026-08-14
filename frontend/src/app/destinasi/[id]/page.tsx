@@ -12,6 +12,7 @@ import Button from '@/components/ui/Button';
 import { ArrowLeft, Clock, MapPin, Navigation, BookmarkPlus, CheckCircle2, Ticket, Tent } from 'lucide-react';
 import { useRouteContext } from '@/context/RouteContext';
 import { useAuth } from '@/context/AuthContext';
+import AuthPromptModal from '@/components/auth/AuthPromptModal';
 import type { Destination } from '@/types';
 
 export default function DetailDestinasiPage() {
@@ -20,6 +21,7 @@ export default function DetailDestinasiPage() {
   const router = useRouter();
   const [dest, setDest] = useState<Destination | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { state, dispatch } = useRouteContext();
   const { user } = useAuth();
 
@@ -46,7 +48,7 @@ export default function DetailDestinasiPage() {
   const handleToggleRoute = () => {
     if (!dest) return;
     if (!user) {
-      router.push(`/login?redirect=${encodeURIComponent(`/destinasi/${dest.id}`)}`);
+      setIsAuthModalOpen(true);
       return;
     }
     if (isSaved) {
@@ -163,6 +165,14 @@ export default function DetailDestinasiPage() {
 
         {dest.kisahDestinasi && <KisahDestinasiPanel kisah={dest.kisahDestinasi} />}
       </div>
+
+      <AuthPromptModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        title="Simpan Destinasi ke Rute"
+        description={`Masuk atau daftar akun agar ${dest.name} dan rute liburanmu tersimpan rapi di akun wisatamu.`}
+        redirectPath={`/destinasi/${dest.id}`}
+      />
     </PageTransition>
   );
 }

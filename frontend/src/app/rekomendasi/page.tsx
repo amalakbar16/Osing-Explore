@@ -15,6 +15,7 @@ import {
   Check, CheckCircle2, Clock, MapPin, Utensils, Bed, 
   Lightbulb, RotateCcw, ArrowRight, Lock
 } from 'lucide-react';
+import AuthPromptModal from '@/components/auth/AuthPromptModal';
 
 export default function RekomendasiPage() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function RekomendasiPage() {
   const [duration, setDuration] = useState<WizardRequest['duration']>('1_hari');
   const [result, setResult] = useState<WizardRecommendationResponse | null>(null);
   const [applied, setApplied] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   // Resume pending questionnaire if user just logged in
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function RekomendasiPage() {
       if (typeof window !== 'undefined') {
         localStorage.setItem('osing_pending_wizard', JSON.stringify({ vibe, budget, duration }));
       }
-      router.push('/login?redirect=/rekomendasi');
+      setIsAuthModalOpen(true);
       return;
     }
 
@@ -74,7 +76,7 @@ export default function RekomendasiPage() {
   const handleApplyRoute = () => {
     if (!result) return;
     if (!user) {
-      router.push('/login?redirect=/rekomendasi');
+      setIsAuthModalOpen(true);
       return;
     }
     
@@ -588,8 +590,15 @@ export default function RekomendasiPage() {
 
           </div>
         )}
-
       </div>
+
+      <AuthPromptModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        title="Simpan & Buat Rekomendasi AI"
+        description="Masuk atau daftar akun agar rangkaian rute cerdas ini dapat tersimpan aman dan terhubung dengan profil wisatamu."
+        redirectPath="/rekomendasi"
+      />
     </PageTransition>
   );
 }

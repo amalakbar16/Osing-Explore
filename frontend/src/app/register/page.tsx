@@ -20,7 +20,7 @@ function RegisterFormContent() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/profil';
 
-  const { signUp, signInWithGoogle, signInDemo } = useAuth();
+  const { signUp, signInWithGoogle } = useAuth();
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');

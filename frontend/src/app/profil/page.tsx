@@ -17,13 +17,13 @@ import Link from 'next/link';
 
 export default function ProfilPage() {
   const router = useRouter();
-  const { user, profile, isDemoUser, signOut, signInDemo, fetchCloudRoutes, deleteCloudRoute } = useAuth();
+  const { user, profile, signOut, fetchCloudRoutes, deleteCloudRoute } = useAuth();
   const { dispatch } = useRouteContext();
 
   const [cloudRoutes, setCloudRoutes] = useState<CloudSavedRoute[]>([]);
   const [loadingRoutes, setLoadingRoutes] = useState(false);
 
-  const isAuthenticated = !!user || isDemoUser;
+  const isAuthenticated = !!user;
 
   useEffect(() => {
     if (isAuthenticated) {

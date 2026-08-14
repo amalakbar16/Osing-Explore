@@ -8,19 +8,21 @@ import EmptyState from '@/components/ui/EmptyState';
 import { MapPin, Map, Trash2, Navigation, Cloud, CheckCircle2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import LazyImage from '@/components/common/LazyImage';
+import AuthPromptModal from '@/components/auth/AuthPromptModal';
 import { useRouter } from 'next/navigation';
 
 export default function RuteSayaPage() {
   const { state, dispatch } = useRouteContext();
-  const { user, isDemoUser, saveRouteToCloud } = useAuth();
+  const { user, saveRouteToCloud } = useAuth();
   const router = useRouter();
 
   const [savingCloud, setSavingCloud] = useState(false);
   const [savedCloudSuccess, setSavedCloudSuccess] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const handleSaveToCloud = async () => {
-    if (!user && !isDemoUser) {
-      router.push('/login?redirect=/rute-saya');
+    if (!user) {
+      setIsAuthModalOpen(true);
       return;
     }
     setSavingCloud(true);
@@ -122,7 +124,7 @@ export default function RuteSayaPage() {
                 </>
               ) : (
                 <>
-                  <Cloud size={18} /> {user || isDemoUser ? 'Simpan Rute ke Akun Cloud' : 'Masuk untuk Simpan ke Cloud'}
+                  <Cloud size={18} /> {user ? 'Simpan Rute ke Akun Cloud' : 'Masuk untuk Simpan ke Cloud'}
                 </>
               )}
             </Button>
@@ -137,6 +139,14 @@ export default function RuteSayaPage() {
           </div>
         </div>
       )}
+
+      <AuthPromptModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        title="Simpan Rute ke Cloud"
+        description="Masuk atau daftar akun agar rute liburanmu tersimpan permanen di cloud dan bisa diakses dari perangkat mana pun."
+        redirectPath="/rute-saya"
+      />
     </PageTransition>
   );
 }

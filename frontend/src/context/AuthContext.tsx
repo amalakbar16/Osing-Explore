@@ -26,11 +26,9 @@ interface AuthContextType {
   user: User | null;
   profile: UserProfile | null;
   loading: boolean;
-  isDemoUser: boolean;
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signUp: (email: string, password: string, fullName: string, personaTitle?: string) => Promise<{ success: boolean; error?: string }>;
   signInWithGoogle: () => Promise<{ success: boolean; error?: string }>;
-  signInDemo: () => Promise<void>;
   signOut: () => Promise<void>;
   saveRouteToCloud: (title: string, destinations: Destination[], corridorId?: string) => Promise<{ success: boolean; error?: string }>;
   fetchCloudRoutes: () => Promise<CloudSavedRoute[]>;
@@ -39,30 +37,16 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const DEMO_USER_PROFILE: UserProfile = {
-  id: 'demo-wisatawan-id',
-  email: 'wisatawan.gemastik@osing.id',
-  fullName: 'Dimas Wicaksono',
-  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-  personaTitle: 'Penjelajah Alam Vulkanik (Level 2)',
-  travelStyle: 'alam',
-};
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isDemoUser, setIsDemoUser] = useState(false);
 
   // Initialize auth session
   useEffect(() => {
-    // Check if demo user session was saved locally
-    const savedDemo = typeof window !== 'undefined' ? localStorage.getItem('osing_demo_user_active') : null;
-    if (savedDemo === 'true') {
-      setIsDemoUser(true);
-      setProfile(DEMO_USER_PROFILE);
-      setLoading(false);
-      return;
+    // Clear old demo flags if any
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('osing_demo_user_active');
     }
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -70,6 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (session?.user) {
         fetchProfile(session.user);
       } else {
+        setProfile(null);
         setLoading(false);
       }
     });
@@ -78,14 +63,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user);
-      } else if (!isDemoUser) {
+      } else {
         setProfile(null);
         setLoading(false);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [isDemoUser]);
+  }, []);
 
   const fetchProfile = async (currentUser: User) => {
     try {
@@ -105,7 +90,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           travelStyle: data.travel_style || 'santai',
         });
       } else {
-        // Fallback profile if table is not yet populated
         setProfile({
           id: currentUser.id,
           email: currentUser.email || '',
@@ -176,48 +160,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signInDemo = async () => {
-    setIsDemoUser(true);
-    setProfile(DEMO_USER_PROFILE);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('osing_demo_user_active', 'true');
-    }
-  };
-
   const signOut = async () => {
-    if (isDemoUser) {
-      setIsDemoUser(false);
-      setProfile(null);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('osing_demo_user_active');
-      }
-    } else {
-      await supabase.auth.signOut();
-      setUser(null);
-      setProfile(null);
-    }
+    await supabase.auth.signOut();
+    setUser(null);
+    setProfile(null);
   };
 
   const saveRouteToCloud = async (title: string, destinations: Destination[], corridorId?: string) => {
-    if (!profile) return { success: false, error: 'Silakan masuk terlebih dahulu.' };
-
-    if (isDemoUser) {
-      // Save to demo local storage cloud mock
-      const existing = JSON.parse(localStorage.getItem('osing_demo_cloud_routes') || '[]');
-      const newRoute: CloudSavedRoute = {
-        id: `demo-route-${Date.now()}`,
-        title: title || `Rute ${destinations[0]?.name || 'Wisata'}`,
-        corridorId: corridorId || destinations[0]?.corridorIds[0] || 'jalur-ijen-utara',
-        destinations,
-        createdAt: new Date().toISOString(),
-      };
-      localStorage.setItem('osing_demo_cloud_routes', JSON.stringify([newRoute, ...existing]));
-      return { success: true };
-    }
+    if (!user) return { success: false, error: 'Silakan masuk terlebih dahulu.' };
 
     try {
       const { error } = await supabase.from('user_saved_routes').insert({
-        user_id: profile.id,
+        user_id: user.id,
         title: title || `Rute ${destinations[0]?.name || 'Wisata'}`,
         corridor_id: corridorId || destinations[0]?.corridorIds[0] || 'jalur-ijen-utara',
         destinations,
@@ -232,65 +186,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const fetchCloudRoutes = async (): Promise<CloudSavedRoute[]> => {
-    if (!profile) return [];
-
-    if (isDemoUser) {
-      const saved = localStorage.getItem('osing_demo_cloud_routes');
-      if (saved) {
-        return JSON.parse(saved);
-      }
-      // Default demo cloud routes
-      const defaultDemoRoutes: CloudSavedRoute[] = [
-        {
-          id: 'demo-route-1',
-          title: 'Petualangan Vulkanik Ijen & Jagir',
-          corridorId: 'jalur-ijen-utara',
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          destinations: [
-            {
-              id: 'dest-ijen',
-              name: 'Kawah Ijen',
-              category: 'alam',
-              corridorIds: ['jalur-ijen-utara'],
-              coordinates: { lat: -8.0583, lng: 114.2418 },
-              rating: 4.8,
-              distanceFromRouteKm: 0,
-              isMainDestination: true,
-              images: ['https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=600&auto=format&fit=crop&q=80'],
-              shortDescription: 'Danau kawah asam terbesar di dunia dengan fenomena api biru mistis.',
-              openingHours: '01:00 - 12:00',
-              priceRange: 'murah',
-              ticketPrice: 15000,
-              duration: '4-6 Jam',
-            },
-            {
-              id: 'dest-jagir',
-              name: 'Air Terjun Jagir',
-              category: 'alam',
-              corridorIds: ['jalur-ijen-utara'],
-              coordinates: { lat: -8.1978, lng: 114.3056 },
-              rating: 4.5,
-              distanceFromRouteKm: 1.2,
-              isMainDestination: false,
-              images: ['https://images.unsplash.com/photo-1546548970-71785318a17b?w=600&auto=format&fit=crop&q=80'],
-              shortDescription: 'Air terjun kembar bersumber dari mata air alami pegunungan Ijen.',
-              openingHours: '07:00 - 17:00',
-              priceRange: 'murah',
-              ticketPrice: 5000,
-              duration: '1-2 Jam',
-            }
-          ]
-        }
-      ];
-      localStorage.setItem('osing_demo_cloud_routes', JSON.stringify(defaultDemoRoutes));
-      return defaultDemoRoutes;
-    }
+    if (!user) return [];
 
     try {
       const { data, error } = await supabase
         .from('user_saved_routes')
         .select('*')
-        .eq('user_id', profile.id)
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
       if (data && !error) {
@@ -309,21 +211,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const deleteCloudRoute = async (routeId: string) => {
-    if (!profile) return { success: false, error: 'Silakan masuk terlebih dahulu.' };
-
-    if (isDemoUser) {
-      const existing: CloudSavedRoute[] = JSON.parse(localStorage.getItem('osing_demo_cloud_routes') || '[]');
-      const filtered = existing.filter(r => r.id !== routeId);
-      localStorage.setItem('osing_demo_cloud_routes', JSON.stringify(filtered));
-      return { success: true };
-    }
+    if (!user) return { success: false, error: 'Silakan masuk terlebih dahulu.' };
 
     try {
       const { error } = await supabase
         .from('user_saved_routes')
         .delete()
         .eq('id', routeId)
-        .eq('user_id', profile.id);
+        .eq('user_id', user.id);
 
       if (error) return { success: false, error: error.message };
       return { success: true };
@@ -339,11 +234,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         profile,
         loading,
-        isDemoUser,
         signIn,
         signUp,
         signInWithGoogle,
-        signInDemo,
         signOut,
         saveRouteToCloud,
         fetchCloudRoutes,
