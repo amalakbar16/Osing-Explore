@@ -11,6 +11,7 @@ import RatingBadge from '@/components/ui/RatingBadge';
 import Button from '@/components/ui/Button';
 import { ArrowLeft, Clock, MapPin, Navigation, BookmarkPlus, CheckCircle2, Ticket, Tent } from 'lucide-react';
 import { useRouteContext } from '@/context/RouteContext';
+import { useAuth } from '@/context/AuthContext';
 import type { Destination } from '@/types';
 
 export default function DetailDestinasiPage() {
@@ -20,11 +21,13 @@ export default function DetailDestinasiPage() {
   const [dest, setDest] = useState<Destination | null>(null);
   const [loading, setLoading] = useState(true);
   const { state, dispatch } = useRouteContext();
+  const { user } = useAuth();
 
   const isSaved = state.savedRoute.some(d => d.id === id);
 
   useEffect(() => {
     if (id) {
+      setLoading(true);
       getDestinationById(id).then(data => {
         setDest(data || null);
         setLoading(false);
@@ -42,6 +45,10 @@ export default function DetailDestinasiPage() {
 
   const handleToggleRoute = () => {
     if (!dest) return;
+    if (!user) {
+      router.push(`/login?redirect=${encodeURIComponent(`/destinasi/${dest.id}`)}`);
+      return;
+    }
     if (isSaved) {
       dispatch({ type: 'REMOVE_FROM_ROUTE', payload: dest.id });
     } else {
